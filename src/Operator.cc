@@ -744,6 +744,8 @@ Operator Operator::dagger( StackPtr& stackPtr ) const
   default:
     error("dagger: Unknown object in command stack.");
   }
+  // TODO: find something elegant to take care of warning
+  return Operator();
 }
 
 //////////////////////////////////////////////////////////////////////

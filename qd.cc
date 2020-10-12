@@ -15,7 +15,7 @@
 extern "C" {
     void fcoeff_(int* n, double* c);
 }
-main()
+int main()
 {
   Coeff cc;
   Mesh  mm;

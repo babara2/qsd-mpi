@@ -12,7 +12,7 @@
 #include "FieldOp.h"
 #include "Complex.h"
 
-main()
+int main()
 {
     // Basic operators
   IdentityOperator Id;
@@ -62,7 +62,7 @@ main()
     // Output
   const int nOfOut = 2;
   Operator outlist[nOfOut] = {A,N};	    // Operators to output
-  char *flist[nOfOut] = {"A.out","N.out"};  // Output files
+  const char *flist[nOfOut] = {"A.out","N.out"};  // Output files
 
     // Start integration
   Trajectory theTraject(psi,dt,theStepper,&rand1);

@@ -14,7 +14,7 @@
 #include "SpinOp.h"
 #include "Complex.h"
 
-main()
+int main()
 {
     // Basic operators
   IdentityOperator id;
@@ -64,7 +64,7 @@ main()
   const int nOfOut = 2;
   Operator outlist[nOfOut] = {sz,sx};	        // Operators to output
 
-  char *flist[nOfOut] = {"sz.out","sx.out"};    // Output files
+  const char *flist[nOfOut] = {"sz.out","sx.out"};    // Output files
     // While the program is running, in addition to the data written in the
     // output files, 7 columns are written to standard output:
     //  the time `t' in column 1;
@@ -92,9 +92,3 @@ main()
     std::cout << std::endl;
   }
 }
-
-
-
-
-
-

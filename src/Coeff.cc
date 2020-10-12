@@ -71,7 +71,7 @@ void Coeff::coefficients(int n, double *c)
 void Coeff::coefficients(double *c)
 {
   int i, j, k, lwork, info, mm, nn, lda, ldb, nrhs;
-  char* trans;
+  const char* trans;
   double* a;
   double* e;
   double* work;

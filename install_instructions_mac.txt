@@ -1,0 +1,7 @@
+install fftw3 and gfortran separately as well (so might as well not have done the above 2; lesson learned? paitence)
+
+add export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/gfortran/lib to bash_profile so that the linker knows where to look for gfortran libs
+
+TROUBLESHOOT:
+If the above two steps don't work. Try to:
+Install jdk to get jvm to get easy install for fftw3 which is a part of fink distributions (The Fink project is an effort to port and package open-source Unix programs to macOS.); the easy installer installs xquartz

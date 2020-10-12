@@ -30,7 +30,7 @@
 subroutine fcoeff(n, c)
 
   integer, intent(in):: n
-  real(8), intent(in) :: c(2*n+1)
+  real(8), intent(inout) :: c(2*n+1)
 
   integer :: m, res
 !  real(8), allocatable :: c(:), x(:)

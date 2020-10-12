@@ -335,7 +335,7 @@ void Trajectory::plotExp_obsolete( int nX, const Operator* X, FILE** fp, int* pi
 }
 
 
-void Trajectory::plotExp( int nX, const Operator* X, char** fname, int* pipe,
+void Trajectory::plotExp( int nX, const Operator* X, const char** fname, int* pipe,
     int dtsPerStep, int nOfSteps, int move,
     double delta, int width, double moveEps, char* savedState)
   //
@@ -353,7 +353,7 @@ void Trajectory::plotExp( int nX, const Operator* X, char** fname, int* pipe,
 {
   double t=t0;           // time
   double dtlast=dt;      // keep track of numerical timestep
-  double xpipe[4];       // output to standard output
+  double xpipe[nX];       // output to standard output
   FILE** fp;
   fp = new FILE*[nX];    // nX files are used
 
@@ -361,7 +361,7 @@ void Trajectory::plotExp( int nX, const Operator* X, char** fname, int* pipe,
     for ( int i=0; i<nX; i++) fp[i] = fopen(fname[i],"w");
 
   if( nX > 0 ) {
-    for( int k=0; k<4; k++ )
+    for( int k=0; k<nX; k++ )
       if( pipe[k] < 1 || pipe[k] > 4*nX )
         std::cerr << "Warning: illegal argument 'pipe' in Trajectory::plotExp."
           << std::endl;
@@ -377,16 +377,20 @@ void Trajectory::plotExp( int nX, const Operator* X, char** fname, int* pipe,
     Complex expec2 = psi*psi1 - expec*expec;
     fprintf( fp[i], "%lG %lG %lG %lG %lG\n",
         t, real(expec), imag(expec), real(expec2), imag(expec2) ); // file
-    for( int k=0; k<4; k++ ) {
+    for( int k=0; k<nX; k++ ) {
       if( pipe[k] == 4*i+1 ) xpipe[k] = real(expec);          // standard i/o
       else if( pipe[k] == 4*i+2 ) xpipe[k] = imag(expec);
       else if( pipe[k] == 4*i+3 ) xpipe[k] = real(expec2);
       else if( pipe[k] == 4*i+4 ) xpipe[k] = imag(expec2);
     }
   }
-  if( nX > 0 )
-    printf("%lG %lG %lG %lG %lG %d %d\n",
-        t,xpipe[0],xpipe[1],xpipe[2],xpipe[3],psi.size(),(*stepper).getNumdts());
+  if( nX > 0 ) {
+    printf("%lG ", t);
+    for(int k=0; k<nX; k++) {
+    printf("%lG ",xpipe[k]);
+    }
+    printf("%d %d\n", psi.size(),(*stepper).getNumdts());
+  }
 
   for (int n=1; n<=nOfSteps; n++) {
     for (int n1=0; n1<dtsPerStep; n1++) {
@@ -405,16 +409,20 @@ void Trajectory::plotExp( int nX, const Operator* X, char** fname, int* pipe,
       Complex expec2 = psi*psi1 - expec*expec;
       fprintf( fp[i], "%lG %lG %lG %lG %lG\n",
           t, real(expec),imag(expec), real(expec2),imag(expec2) ); // file
-      for( int k=0; k<4; k++ ) {
+      for( int k=0; k<nX; k++ ) {
         if( pipe[k] == 4*i+1 ) xpipe[k] = real(expec);          // standard i/o
         else if( pipe[k] == 4*i+2 ) xpipe[k] = imag(expec);
         else if( pipe[k] == 4*i+3 ) xpipe[k] = real(expec2);
         else if( pipe[k] == 4*i+4 ) xpipe[k] = imag(expec2);
       }
     }
-    if( nX > 0 )
-      printf("%lG %lG %lG %lG %lG %d %d\n",
-          t,xpipe[0],xpipe[1],xpipe[2],xpipe[3],psi.size(),(*stepper).getNumdts());
+    if( nX > 0 ) {
+      printf("%lG ", t);
+      for(int k=0; k<nX; k++) {
+      printf("%lG ",xpipe[k]);
+      }
+      printf("%d %d\n", psi.size(),(*stepper).getNumdts());
+    }
   }
 
   if( nX > 0 ) {
@@ -432,7 +440,7 @@ void Trajectory::plotExp( int nX, const Operator* X, char** fname, int* pipe,
   }
 }
 
-void Trajectory::sumExp( int nX, const Operator* X, char** fname,
+void Trajectory::sumExp( int nX, const Operator* X, const char** fname,
     int dtsPerStep, int nOfSteps,
     int nTrajectory, int nTrajSave, int ReadFile,
     int move, double delta, int width, double moveEps)
@@ -487,7 +495,7 @@ void Trajectory::sumExp( int nX, const Operator* X, char** fname,
       // read the preceding expectations values
       for ( n=0; n<=nOfSteps; n++)
         for ( i=0; i<nX; i++)
-          fscanf( fp[i], "%lf %lf %lf %lf %lf",
+          fscanf( fp[i], "%lf %lf %lf %lf",
               &OutputExpR[n][i], &OutputExpI[n][i],
               &OutputExpR[n][nX+i], &OutputExpI[n][nX+i]);
       // close the files
@@ -574,12 +582,14 @@ void Trajectory::sumExp( int nX, const Operator* X, char** fname,
   for ( i=0; i<nX; i++) fp[i] = fopen(fname[i],"w");
   t=t0;
   for ( i=0; i<nX; i++)
-    fprintf( fp[i], "Number_of_Trajectories  %d \n", nTrajEff);
+    // fprintf( fp[i], "Number_of_Trajectories  %d \n", nTrajEff);
   for ( n=0; n<=nOfSteps; n++) {
-    for ( i=0; i<nX; i++)
+    for ( i=0; i<nX; i++) {
+      // std::cout << i << std::endl;
       fprintf( fp[i], "%lG %lG %lG %lG %lG\n", t,
           OutputExpR[n][i], OutputExpI[n][i],
           OutputExpR[n][nX+i], OutputExpI[n][nX+i]);
+      }
     t += dtsPerStep*dt;
   }
   for ( i=0; i<nX; i++) fclose(fp[i]);
@@ -1285,13 +1295,13 @@ void AdaptiveOrthoJump::derivs(double t, State& psi, State& dpsi)
   stochasticFlag = 0;
 }
 
-void Trajectory::error(char* message)  // print error message and exit
+void Trajectory::error(const char* message)  // print error message and exit
 {
   std::cerr << message << std::endl;
   exit(1);
 }
 
-void IntegrationStep::error(char* message)  // print error message
+void IntegrationStep::error(const char* message)  // print error message
 {            // and exit
   std::cerr << message << std::endl;
   exit(1);
@@ -1303,7 +1313,3 @@ void IntegrationStep::error(char* message)  // print error message
 #undef PGROW
 #undef PSHRNK
 #undef ERRCON
-
-
-
-

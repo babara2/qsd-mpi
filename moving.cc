@@ -14,7 +14,7 @@
 #include "FieldOp.h"
 #include "Complex.h"
 
-main()
+int main()
 {
     // Basic operators
   IdentityOperator Id;
@@ -94,7 +94,7 @@ main()
   const int nOfOut = 2;
   Operator outlist[nOfOut] = {A,N};	    // Operators to output
 
-  char *flist[nOfOut] = {"A.out","N.out"};  // Output files
+  const char *flist[nOfOut] = {"A.out","N.out"};  // Output files
 
   int pipe[4] = {1,2,5,7};
     // Standard output:

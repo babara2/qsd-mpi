@@ -53,7 +53,7 @@ LIBS_mlhpc  = -lblas -llapack -lgfortran -lm -lmpi -lfftw3
 ifdef PLATFORM
     LIBS = ${LIBS_$(PLATFORM)}
 endif
-LDFLAGS = -L$(QSD_DIR) # where .o files are located
+LDFLAGS = -L$(QSD_DIR) -L /usr/local/gfortran/lib # where .o files are located
 
 
 #-------------------------------------------------------------------
@@ -69,7 +69,7 @@ HEAD1 = $(INC)/Operator.h $(INC)/PrimOp.h $(INC)/State.h $(INC)/Complex.h $(INC)
 OBJ2 = FieldOp.o SpinOp.o AtomOp.o
 OBJ3 = Traject.o $(RAN_OBJ)
 #OBJ4 = mesh.o coeff.o poisson.o
-OBJ4 = mesh.o coeff.o
+OBJ4 = mesho.o coeffo.o
 OBJ5 = Mesh.o Coeff.o Epot.o
 OBJ6 = fftw3.o cube_function.o Poisson.o
 OBJ = $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6)
@@ -78,7 +78,7 @@ OBJ = $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6)
 #-------------------------------------------------------------------
 # Add driver routines here.
 
-ALL = onespin spins simple moving sums testprog template lineob damped qcascade sechar qd
+ALL = onespin spins simple moving sums testprog template lineob damped qcascade sechar qd two_level_atom
 
 help:
 	@echo ""
@@ -121,6 +121,9 @@ onespin: onespin.cc $(OBJ)
 
 spins: spins.cc $(OBJ)
 	$(LINK) -o spins spins.cc $(OBJ) $(LDFLAGS) $(LIBS)
+
+two_level_atom: two_level_atom.cpp $(OBJ)
+	$(LINK) -o two_level_atom two_level_atom.cpp $(OBJ) $(LDFLAGS) $(LIBS)
 
 simple: simple.cc $(OBJ)
 	$(LINK) -o simple simple.cc $(OBJ) $(LDFLAGS) $(LIBS)
@@ -208,7 +211,7 @@ MLCG.o: $(SRC)/MLCG.cc $(RAN_HEAD)
 CmplxRan.o: $(SRC)/CmplxRan.cc $(RAN_HEAD) $(INC)/Complex.h
 	$(COMPILE) -o $@ $(SRC)/CmplxRan.cc
 
-coeff.o: $(SRC)/coeff.f90
+coeffo.o: $(SRC)/coeff.f90
 	$(FCOMPILE) -o $@ $(SRC)/coeff.f90
 
 fftw3.o: $(SRC)/fftw3.f90
@@ -220,7 +223,7 @@ cube_function.o: $(SRC)/cube_function.f90
 poisson.o: $(SRC)/poisson.f90
 	$(FCOMPILE) -o $@ $(SRC)/poisson.f90
 
-mesh.o: $(SRC)/mesh.f90
+mesho.o: $(SRC)/mesh.f90
 	$(FCOMPILE) -o $@ $(SRC)/mesh.f90
 
 
@@ -250,4 +253,3 @@ uninstall:
 #-------------------------------------------------------------------
 
 .PHONY: all debug objectfiles cleanexe cleanrand clean distclean help install uninstall
-

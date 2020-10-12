@@ -20,7 +20,7 @@ double driving(double t)           // Step function.
   return 0.0;
 }
 
-main()
+int main()
 {
     // Basic operators
   IdentityOperator id1(0);  // Operates on the zeroth degree of freedom.
@@ -77,7 +77,7 @@ main()
   const int nOfOut = 2;
   Operator outlist[nOfOut] = {sz1,sz2};	        // Operators to output
 
-  char *flist[nOfOut] = {"sz1.out","sz2.out"};  // Output files
+  const char *flist[nOfOut] = {"sz1.out","sz2.out"};  // Output files
 
   int pipe[4] = {1,3,5,7};
     // Controls standard output. For details see `onespin.cc`.

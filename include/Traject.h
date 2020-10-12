@@ -60,7 +60,7 @@ protected:
   State newsum;
 
   virtual void derivs(double, State&, State&);
-  void error(char* message);
+  void error(const char* message);
 };
 
 class Order2Step : public IntegrationStep
@@ -205,7 +205,7 @@ public:
   // Output expectation and variance of the operators `X[i]'
   // to the files pointed at by `files[i]', i<nX.
 
-  void plotExp( int nX, const Operator* X, char** fname, int* pipe,
+  void plotExp( int nX, const Operator* X, const char** fname, int* pipe,
     int dtsperStep, int nOfSteps, int move=0,
     double delta=1e-4, int width=2, double moveEps=1e-4, char* savedState=0); 
   // Numerical computation of trajectory (Second order for the deterministic
@@ -222,7 +222,7 @@ public:
   // Unless the string variable `savedState' is equal to the Null pointer,
   // the final state is saved to the file `savedState'.
 
-  void sumExp( int nX, const Operator* X, char** fname,
+  void sumExp( int nX, const Operator* X, const char** fname,
     int dtsperStep, int nOfSteps, 
     int nTrajectory=1, int nTrajSave=0, int ReadFile=0, 
     int move=0, double delta=1e-4, int width=2, double moveEps=1e-4);
@@ -250,7 +250,7 @@ private:
   double t0;               // Initial time.
   IntegrationStep* stepper;	// Basic integrator step
 
-  void error(char* message);	// print error message and exit
+  void error(const char* message);	// print error message and exit
 };
 
 #endif

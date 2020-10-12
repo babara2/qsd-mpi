@@ -80,6 +80,7 @@ void Poisson::poisson_init()
    for (iy=1;iy<=db2;iy++) {
       ixx2 = pad_feq(ix, db1, 1);
       for(ix=1;ix<=cf.nx;ix++) {
+         // TODO: babara2, figure out what needs to be done here 
          sqrt(temp1*temp1*ixx1*ixx1 + temp2*temp2*ixx2*ixx2);
          fft_coul_fs[ix*cf.nx+iy] = 2.0*pi*r_c*besselint(vec*r_c);
       }

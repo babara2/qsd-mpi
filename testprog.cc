@@ -59,7 +59,7 @@ int main()
 // Output
   const int nOfOut = 3;
   Operator outlist[nOfOut]={ Sp*A2*Sm*Sp, Sm*Sp*A2*Sm, A2 };
-  char *flist[nOfOut]={"X1.out","X2.out","A2.out"};
+  const char *flist[nOfOut]={"X1.out","X2.out","A2.out"};
   int pipe[] = {1,5,9,11}; // controls standard output (see `onespin.cc')
 // Simulate one trajectory (for several trajectories see `onespin.cc')
   Trajectory traj(psiIni, dt, stepper, &rndm);  // see paper Section 5
